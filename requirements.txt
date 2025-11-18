@@ -1,0 +1,14 @@
+flask==2.0.1
+flask-cors==3.0.10
+Flask-SQLAlchemy
+Flask-Login
+Werkzeug
+pydantic==1.10.8
+python-dotenv==0.21.1
+uuid==1.30
+# --- Let pip resolve the compatible LangChain versions ---
+langchain-core
+langchain-google-genai
+langchain-community
+langchain-chroma
+chromadb

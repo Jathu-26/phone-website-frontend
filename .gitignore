@@ -1,0 +1,15 @@
+.vs/
+__pycache__/
+instance/
+*.db
+*.sqlite
+*.pyc
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.mp4
+*.env
+chroma_db/
+han_dev/
