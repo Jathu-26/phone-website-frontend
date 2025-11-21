@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" {% if current_user.is_authenticated and current_user.theme %}data-theme="{{ current_user.theme }}"{% endif %}>
 
 <head>
   <meta charset="UTF-8" />
@@ -69,25 +69,27 @@
           </div>
 
           <div class="nav__icons">
-            <a href="#" class="icon__item" id="login-btn">
+            <a href="{{ url_for('login') }}" class="icon__item" id="login-btn" title="Login">
               <svg class="icon__user">
                 <use xlink:href="./static/images/sprite.svg#icon-user"></use>
               </svg>
             </a>
 
-            <a href="#" class="icon__item" id="search-btn">
+            <a href="{{ url_for('search') }}" class="icon__item" id="search-btn" title="Search">
               <svg class="icon__search">
                 <use xlink:href="./static/images/sprite.svg#icon-search"></use>
               </svg>
             </a>
 
-            <a href="#" class="icon__item" id="cart-btn">
+            <a href="{{ url_for('cart') }}" class="icon__item" id="cart-btn" title="Cart">
               <svg class="icon__cart">
                 <use xlink:href="./static/images/sprite.svg#icon-shopping-basket"></use>
               </svg>
               <span id="cart__total">3</span>
             </a>
           </div>
+          <!-- Dark mode toggle (floating) -->
+          <button id="dark-mode-toggle" class="dark-toggle" title="Toggle dark mode">🌙</button>
         </nav>
       </div>
     </div>
@@ -1210,6 +1212,8 @@ Gartner Peer Insights Voice of the Customer for Enterprise Backup and Recovery S
   <script src="./static/js/slider.js"></script>
   <script src="./static/js/email.js" defer></script>
   <script src="./static/js/footer.js" defer></script>
+  <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/search.js') }}"></script>
   
 </body>
 

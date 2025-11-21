@@ -59,6 +59,83 @@ def login():
             flash('Invalid credentials', 'danger')
     return render_template('login.html')
 
+
+# ---------------- Forgot Password Route ----------------
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        user = User.query.filter_by(email=email).first()
+        if user:
+            # In a real app: generate token and send email. Here we mock the behavior.
+            flash('If that email is registered, a reset link has been sent.', 'info')
+        else:
+            flash('If that email is registered, a reset link has been sent.', 'info')
+        return redirect(url_for('login'))
+    return render_template('forgot_password.html')
+
+
+# ---------------- Set Theme Route ----------------
+@app.route('/set_theme', methods=['POST'])
+@login_required
+def set_theme():
+    try:
+        data = request.get_json(force=True)
+        theme = data.get('theme')
+        if theme not in ('light', 'dark'):
+            return {'status': 'error', 'message': 'invalid theme'}, 400
+        current_user.theme = theme
+        db.session.commit()
+        return {'status': 'ok'}
+    except Exception as e:
+        return {'status': 'error', 'message': str(e)}, 500
+
+
+# ---------------- Search Route ----------------
+@app.route('/search')
+def search():
+    q = request.args.get('q', "").strip()
+    results = []
+    if q:
+        import json, os
+        data_path = os.path.join(app.root_path, 'static', 'data', 'products.json')
+        try:
+            with open(data_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                products = data.get('products', [])
+                qlow = q.lower()
+                for p in products:
+                    title = str(p.get('title','')).lower()
+                    cat = str(p.get('category','')).lower()
+                    if qlow in title or qlow in cat:
+                        results.append(p)
+        except Exception as e:
+            flash('Search currently unavailable', 'danger')
+    return render_template('search_results.html', products=results, q=q)
+
+
+@app.route('/api/products')
+def api_products():
+    import json, os
+    data_path = os.path.join(app.root_path, 'static', 'data', 'products.json')
+    try:
+        with open(data_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            return {'products': data.get('products', [])}
+    except Exception:
+        return {'products': []}
+
+
+# ---------------- Cart Route ----------------
+@app.route('/cart')
+def cart():
+    # Render cart view. If you want to require login add @login_required
+    try:
+        return render_template('cart.html')
+    except Exception:
+        # Fallback: if template missing, redirect to home
+        return redirect(url_for('home'))
+
 # ---------------- Logout Route ----------------
 @app.route('/logout')
 @login_required

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Search results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body {% if current_user.is_authenticated and current_user.theme %}data-theme="{{ current_user.theme }}"{% endif %}>
+    {% include 'base.html' %}
+
+    <div class="container mt-4">
+      <h2>Search results for "{{ q }}"</h2>
+      {% if products %}
+        <div class="category__center">
+          {% for p in products %}
+            <div class="product">
+              <div class="product__header">
+                <img src="{{ p.image.replace('./static','') if p.image else '/static/images/products/iPhone/iphone1.jpeg' }}" alt="{{ p.title }}">
+              </div>
+              <div class="product__footer">
+                <h3>{{ p.title }}</h3>
+                <div class="product__price"><h4>${{ p.price }}</h4></div>
+                <a href="#"><button class="product__btn">View</button></a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>No products match your search.</p>
+      {% endif %}
+    </div>
+
+  </body>
+</html>
